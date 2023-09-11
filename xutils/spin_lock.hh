@@ -32,7 +32,7 @@ struct SpinLock {
   }
 
   inline void unlock() {
-    compile_fence();
+    r2::compile_fence();
     lock_ = 0;
   }
 

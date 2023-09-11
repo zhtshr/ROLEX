@@ -40,6 +40,8 @@ public:
     }
 
     r2::Timer timer;
+    u64 total = 0;
+    double total_time = 0;
     for (int epoch = 0; epoch < epoches; epoch += 1) {
       sleep(1);
 
@@ -62,18 +64,24 @@ public:
       double passed_msec = timer.passed_msec();
       double res = static_cast<double>(sum) / passed_msec * 1000000.0;
       double res1 = static_cast<double>(sum1) / passed_msec * 1000000.0;
+
+      total += sum;
+      total_time += passed_msec;
+
       r2::compile_fence();
       timer.reset();
 
       LOG(2) << "epoch @ " << epoch << ": thpt: " << format_value(res, 0)
-             << " reqs/sec;"
-             << "second: " << format_value(res1, 0) << " reqs/sec"
-             << "; lat: " << statics[0].data.lat << " us";
+             << " reqs/sec;";
+            //  << "second: " << format_value(res1, 0) << " reqs/sec"
+            //  << "; lat: " << statics[0].data.lat << " us";
 
       if (log_file) {
         outfile << format_value(res, 0) << "\n";
       }
     }
+    double avg = static_cast<double>(total) / total_time * 1000000.0;
+    LOG(2) << "avg thpt:" << format_value(avg, 0) << " reqs/sec;";
     if (log_file) {
       outfile.close();
     }

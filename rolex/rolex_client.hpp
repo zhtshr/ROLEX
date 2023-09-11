@@ -10,16 +10,21 @@
 #include "xcomm/src/transport/rdma_ud_t.hh"   /// UDTranstrant, UDRecvTransport, UDSessionManager
 #include "xcomm/src/rpc/mod.hh"               /// RPCCore
 #include "xutils/local_barrier.hh"            /// PBarrier
+#include "xutils/marshal.hh"
+#include "benchs/rolex_util_back.hh"
+#include "benchs/load_data.hh"
 
 
 extern volatile bool running;
 extern ::xstore::util::PBarrier* bar;
+extern std::vector<rolex::bench::Statics> statics;
 
 namespace rolex {
 
 using namespace r2;
 using namespace rdmaio;
 using namespace test;
+using namespace bench;
 using namespace xstore::util;
 using namespace xstore::rpc;
 using namespace xstore::transport;
@@ -65,7 +70,7 @@ auto rolex_client_worker(const usize& nthreads) -> std::vector<std::unique_ptr<X
        * 
        */
       //std::string server_addr = "192.168.3.101:8888";
-      std::string server_addr = "10.0.0.1:8899";
+      std::string server_addr = "localhost:8888";
       int ud_id = thread_id;
       UDTransport sender;
       {
@@ -162,6 +167,7 @@ auto rolex_client_worker(const usize& nthreads) -> std::vector<std::unique_ptr<X
                     remove_i = 0;
                 }
               }
+              statics[thread_id].increment();
             }
             if (R2_COR_ID() == BenConfig.coros) {
               R2_STOP();

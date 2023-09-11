@@ -24,7 +24,7 @@ using SManager = UDSessionManager<2048>;
 } // namespace bench
 
 using namespace bench;
-using namespace xstore::bench;
+// using namespace xstore::bench;
 
 DEFINE_int64(threads, 1, "num client thread used");
 DEFINE_int64(coros, 1, "num client coroutine used per threads");
@@ -38,7 +38,7 @@ int main(int argc, char **argv) {
 
   std::vector<std::unique_ptr<XThread>> workers;
 
-  std::vector<Statics> statics(FLAGS_threads);
+  std::vector<rolex::bench::Statics> statics(FLAGS_threads);
 
   for (uint thread_id = 0; thread_id < FLAGS_threads; ++thread_id) {
     workers.push_back(
@@ -141,7 +141,7 @@ int main(int argc, char **argv) {
     w->start();
   }
 
-  Reporter::report_thpt(statics, 10);
+  rolex::bench::Reporter::report_thpt(statics, 10);
 
   for (auto &w : workers) {
     w->join();

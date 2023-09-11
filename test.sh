@@ -3,4 +3,4 @@ mkdir build
 cd build
 cmake ..
 make -j
-./rolex > result
+# ./rolex > result

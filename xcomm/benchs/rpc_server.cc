@@ -109,6 +109,8 @@ int main(int argc, char **argv) {
     w->start();
   }
 
+  while(1);
+
   for (auto &w : workers) {
     w->join();
   }

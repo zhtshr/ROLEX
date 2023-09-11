@@ -1,7 +1,5 @@
-#!/usr/bin/env sh
-
-../magic.py config -f build-config.toml
-
-cmake . ; make;
-
-./test_remote_con_rw;
+rm -rf build
+mkdir build
+cd build
+cmake ..
+make -j
